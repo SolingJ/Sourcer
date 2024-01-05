@@ -371,21 +371,21 @@ class Game_Status():
         moves.append(move)
 
   def get_Poi_moves(self, row, col, moves):
+    sente_mae = -1
+    gote_mae = 1
     if row > 0 and col > 0:
       end_row = row-1
       end_col = col-1
 
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
           moves.append(move)
 
     if row > 0:
-
       end_row = row-1
       end_col = col
-
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
           moves.append(move)
@@ -393,7 +393,7 @@ class Game_Status():
     if row > 0 and col < 6:
       end_row = row-1
       end_col = col+1
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
           moves.append(move)
@@ -401,7 +401,7 @@ class Game_Status():
     if row <7:
       end_row = row+1
       end_col = col
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
           moves.append(move)
@@ -410,7 +410,7 @@ class Game_Status():
     if row < 7 and col<6:
       end_row = row+1
       end_col = col+1
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
 
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
@@ -419,7 +419,7 @@ class Game_Status():
     if row <7 and col > 0:
       end_row = row+1
       end_col = col-1
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
 
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
@@ -428,7 +428,7 @@ class Game_Status():
     if col > 0:
       end_row = row
       end_col = col-1
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
 
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
@@ -437,7 +437,7 @@ class Game_Status():
     if col < 6:
       end_row = row
       end_col = col+1
-      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[end_row][end_col][0] == 'g' and end_row <= 2):
+      if( self.board[row][col][0] == 's' and end_row >= 5) or( self.board[row][col][0] == 'g' and end_row <= 2):
         if(not self.board[end_row][end_col][0] == self.board[row][col][0]):
           move = (str(row)+str(col), str(end_row)+str(end_col))
           moves.append(move)
