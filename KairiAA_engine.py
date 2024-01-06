@@ -2,18 +2,19 @@ class Game_Status():
   def __init__(self):
     #先手：Sente, 後手：Gote
     self.board = [
-      ["gN", "gX", "gP", "gK", "gP", "gX", "gN"],
-      ["--", "gC", "--", "--", "--", "gC", "--"],
+      ["gN", "gX", "gP", "gK", "gP", "gX", "gC"],
+      ["--", "gC", "--", "--", "--", "gN", "--"],
       ["gT", "gT", "gT", "gT", "gT", "gT", "gT"],
       ["--", "--", "--", "--", "--", "--", "--"],
       ["--", "--", "--", "--", "--", "--", "--"],
       ["sT", "sT", "sT", "sT", "sT", "sT", "sT"],
-      ["--", "sC", "--", "--", "--", "sC", "--"],
-      ["sN", "sX", "sP", "sK", "sP", "sX", "sN"],
+      ["--", "sN", "--", "--", "--", "sC", "--"],
+      ["sC", "sX", "sP", "sK", "sP", "sX", "sN"],
       ]
     self.senteKingLocation = "73"
     self.goteKingLocation = "03"
 
+    self.counter = 0
     self.sente_to_move = True
     self.moveLog = []
 
@@ -33,6 +34,7 @@ class Game_Status():
     self.moveLog.append([start_row, start_col, end_row, end_col, piece_moved, piece_captured])
     #print("The Player moved a piece from " + str(start_row) + str(start_col) +" to "+ str(end_row)+str(end_col) )
 
+    self.counter += 1
 
     if(piece_moved == 'sT' and end_row == 2) or (piece_moved == 'gT' and end_row == 5) :
       self.board[end_row][end_col] = self.board[end_row][end_col][0] + "G"
@@ -40,10 +42,16 @@ class Game_Status():
     if(piece_moved == 'sC' and end_row <= 2) or (piece_moved == 'gC' and end_row >= 5) :
       self.board[end_row][end_col] = self.board[end_row][end_col][0] + "A"
 
+    if(piece_moved == 'sX' and end_row <= 2) or (piece_moved == 'gX' and end_row >= 5) :
+      self.board[end_row][end_col] = self.board[end_row][end_col][0] + "B"
+
+
+
     if piece_moved == "sK":
       self.senteKingLocation = str(end_row) + str(end_col)
     elif piece_moved == "gK":
       self.goteKingLocation = str(end_row) + str(end_col)
+
 
     self.mate = False
 
@@ -123,10 +131,10 @@ class Game_Status():
             self.get_Naay_moves(row, col, moves)
           if(piece_type == "P"):
             self.get_Poi_moves(row, col, moves)
-
-
-
-
+          if(piece_type == "X"):
+            self.get_Xun_moves(row, col, moves)
+          if(piece_type == "B"):
+            self.get_Bong_moves(row, col, moves)
 
 
 
@@ -224,7 +232,7 @@ class Game_Status():
       end_row = row
       end_col = col + col_adj
 
-      if(self.board[end_row][end_col] == '--' and self.board[end_row][end_col+1] == '--'):
+      if(self.board[end_row][end_col] == '--' and self.board[end_row][col+1] == '--'):
         move = (str(row)+str(col), str(end_row)+str(end_col))
         moves.append(move)
 
@@ -233,7 +241,7 @@ class Game_Status():
       end_row = row
       end_col = col - col_adj
 
-      if(self.board[end_row][end_col] == '--' and self.board[end_row][end_col-1] == '--'):
+      if(self.board[end_row][end_col] == '--' and self.board[end_row][col-1] == '--'):
         move = (str(row)+str(col), str(end_row)+str(end_col))
         moves.append(move)
 
@@ -245,6 +253,8 @@ class Game_Status():
       if(col >= 1 and self.board[row+front][col-1][0] == opp_piece):
         move = (str(row)+str(col), str(row+front)+str(col-1))
         moves.append(move)
+
+
 
 
   def get_Ak_moves(self, row, col, moves):
@@ -264,7 +274,7 @@ class Game_Status():
       end_row = row + row_adj
       end_col = col
 
-      if(self.board[end_row][end_col] == '--' and is_in_row(end_row-front) and self.board[end_row-front][end_col] == '--'):
+      if(is_in_row(end_row) and self.board[end_row][end_col] == '--' and is_in_row(end_row-front) and self.board[end_row-front][end_col] == '--'):
         move = (str(row)+str(col), str(end_row)+str(end_col))
         moves.append(move)
 
@@ -273,7 +283,7 @@ class Game_Status():
       end_row = row
       end_col = col + col_adj
 
-      if(self.board[end_row][end_col] == '--' and self.board[end_row][end_col+1] == '--'):
+      if(is_in_col(end_row) and self.board[end_row][end_col] == '--' and self.board[end_row][col+1] == '--'):
         move = (str(row)+str(col), str(end_row)+str(end_col))
         moves.append(move)
 
@@ -282,7 +292,7 @@ class Game_Status():
       end_row = row
       end_col = col - col_adj
 
-      if(self.board[end_row][end_col] == '--' and self.board[end_row][end_col-1] == '--'):
+      if(self.board[end_row][end_col] == '--' and self.board[end_row][col-1] == '--'):
         move = (str(row)+str(col), str(end_row)+str(end_col))
         moves.append(move)
 
@@ -486,7 +496,7 @@ class Game_Status():
             moves.append(move)
             break
 
-    for col_num in range(col-1, 0, -1):
+    for col_num in range(col-1, -1, -1):
           end_row = row
           end_col = col_num
 
@@ -562,6 +572,96 @@ class Game_Status():
 
 
 
+  def get_Xun_moves(self, row, col, moves):
+    if self.sente_to_move:
+      row_adj = -2
+      col_adj = 2
+      front = -1
+      opp_piece = 'g'
+      self_piece = 's'
+    else:
+      row_adj = 2
+      col_adj = 2
+      front = 1
+      opp_piece = 's'
+      self_piece = 'g'
+
+    end_row = row + row_adj
+    end_col = col + 1
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+    end_row = row + row_adj
+    end_col = col - 1
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+
+  def get_Bong_moves(self, row, col, moves):
+    if self.sente_to_move:
+      row_adj = -2
+      col_adj = 2
+      front = -1
+      opp_piece = 'g'
+      self_piece = 's'
+    else:
+      row_adj = 2
+      col_adj = 2
+      front = 1
+      opp_piece = 's'
+      self_piece = 'g'
+
+    self.get_Xun_moves(row, col, moves)
+
+    end_row = row + 1
+    end_col = col + 2
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+    end_row = row - 1
+    end_col = col + 2
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+    end_row = row + 1
+    end_col = col - 2
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+    end_row = row - 1
+    end_col = col - 2
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+
+    end_row = row - row_adj
+    end_col = col - 1
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+    end_row = row - row_adj
+    end_col = col + 1
+
+    if(is_in_row(end_row) and is_in_col(end_col) and self.board[end_row][end_col][0] != self_piece):
+      move = (str(row)+str(col), str(end_row)+str(end_col))
+      moves.append(move)
+
+
+
 
 
 
@@ -569,4 +669,7 @@ class Game_Status():
 
 
 def is_in_row(row):
-  return 0 <= row <= 7
+  return 0 <= row and row <= 7
+
+def is_in_col(row):
+  return 0 <= row and row <= 6
